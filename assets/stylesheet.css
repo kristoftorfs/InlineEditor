@@ -1,0 +1,39 @@
+#inline-editor-buttons {
+    margin-bottom: 10px;
+    /*text-align: center;*/
+}
+iframe#inline-editor {
+    width: 60%;
+    border: none;
+    -webkit-box-shadow: 0px 0px 20px 0px rgba(50, 50, 50, 0.75);
+    -moz-box-shadow:    0px 0px 20px 0px rgba(50, 50, 50, 0.75);
+    box-shadow:         0px 0px 20px 0px rgba(50, 50, 50, 0.75);
+}
+#inline-editor-frame {
+    padding-right: 30px;
+}
+#inline-editor-editors {
+    float: right;
+    width: 40%;
+}
+
+#inline-editor-spotlight-mask {
+    display: none;
+    position: absolute;
+    top: 0px;
+    height: 0px;
+    z-index: 100;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+.inline-editor-spotlight {
+    position: absolute;
+    z-index: 101;
+    background-color: rgba(255, 255, 255, 0.4);
+    border: 1px solid #fff;
+    border-radius: 3px;
+}
+.inline-editor-spotlight a {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+}
