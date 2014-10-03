@@ -9,7 +9,9 @@ if ($_POST['site'] != $this->GetSiteId()) {
     $ret = false;
 } else {
     $table = $this->GetTable();
-    $this->db->Execute("REPLACE INTO `$table` VALUES (?, ?, ?, ?, ?)", array($_POST['site'], $_POST['page'], $_POST['name'], serialize($_POST), $_POST['value']));
+    $value = $_POST['value'];
+    unset($_POST['value']);
+    $this->db->Execute("REPLACE INTO `$table` VALUES (?, ?, ?, ?, ?)", array($_POST['site'], $_POST['page'], $_POST['name'], serialize($_POST), $value));
     $ret = ($this->db->ErrorNo() == 0);
 }
 
