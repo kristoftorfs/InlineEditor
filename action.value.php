@@ -5,7 +5,7 @@ if (!isset($gCms)) exit;
 
 $site = NetDesign::GetInstance()->GetSiteId();
 $page = ContentOperations::get_instance()->getContentObject()->Alias();
-$default = array_key_exists('default', $params) ? $params['default'] : '';
+$default = array_key_exists('default', $params) ? $params['default'] : 'N/A';
 $name = $params['name'];
 
 $table = $this->GetTable();
