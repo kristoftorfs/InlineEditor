@@ -77,6 +77,7 @@ $(document).ready(function() {
                                     click: function() {
                                         data.value = ed.val();
                                         $.post(writeUrl, data, null, 'json');
+                                        el.data('InlineEditorOriginalData', data.value);
                                         $('#inline-editor-editors').dialog('close');
                                     }
                                 },{
@@ -116,6 +117,7 @@ $(document).ready(function() {
                                     click: function() {
                                         data.value = ed.getContent();
                                         $.post(writeUrl, data, null, 'json');
+                                        el.data('InlineEditorOriginalData', data.value);
                                         $('#inline-editor-editors').dialog('close');
                                     }
                                 },{
@@ -123,7 +125,7 @@ $(document).ready(function() {
                                     icons: { secondary: 'ui-icon-circle-close' },
                                     click: function() {
                                         var ed = tinymce.EditorManager.get('textarea');
-                                        ed.onChange.dispatch(ed, {content: el.data('InlineEditorOriginalData')}, 'test', 'test2');
+                                        ed.onChange.dispatch(ed, {content: el.data('InlineEditorOriginalData')});
                                         $('#inline-editor-editors').dialog('close');
                                     }
                                 }],
@@ -136,11 +138,12 @@ $(document).ready(function() {
                                 open: function() {
                                     toggleEditor('textarea');
                                     $('textarea').val(el.data('InlineEditorOriginalData'));
+                                    el.html(el.data('InlineEditorOriginalData'));
                                     toggleEditor('textarea');
                                     var ed = tinymce.EditorManager.get('textarea');
                                     ed.onChange.listeners = [];
                                     ed.onChange.add(function(ed, l) {
-                                        el.html(l.content);
+                                        el.html(ed.getContent());
                                         // Resize our spotlight
                                         var sl = el.data('spotlight');
                                         sl.width(el.width() - 2);
