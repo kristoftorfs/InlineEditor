@@ -1,9 +1,13 @@
+.no-close .ui-dialog-titlebar-close {
+    display: none;
+}
+
 #inline-editor-buttons {
     margin-bottom: 10px;
     /*text-align: center;*/
 }
 iframe#inline-editor {
-    width: 60%;
+    width: 100%;
     border: none;
     -webkit-box-shadow: 0px 0px 20px 0px rgba(50, 50, 50, 0.75);
     -moz-box-shadow:    0px 0px 20px 0px rgba(50, 50, 50, 0.75);
@@ -13,8 +17,7 @@ iframe#inline-editor {
     padding-right: 30px;
 }
 #inline-editor-editors {
-    float: right;
-    width: 40%;
+    display: none;
 }
 
 #inline-editor-spotlight-mask {

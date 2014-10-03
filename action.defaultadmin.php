@@ -20,6 +20,6 @@ if (class_exists('CmsFormUtils')) {
     */
 } else {
     // CMSMS 1.x
-    $this->smarty->assign('textarea', $this->CreateTextArea(true, null, '', 'textarea', 'editor'));
+    $this->smarty->assign('textarea', $this->CreateTextArea(true, null, '', 'textarea'));
 }
 echo $this->smarty->fetch($this->GetFileResource('defaultadmin.tpl'));

@@ -9,12 +9,10 @@
     <input disabled="disabled" type="submit" name="start" value="Bewerken starten">
     <input disabled="disabled" type="submit" name="cancel" value="Bewerken stoppen">
 </div>
-<div id="inline-editor-editors">
-    <p><strong>Bewerken</strong></p>
-    <input type="text" value="" class="editor">
-    <div class="buttons">
-        <input type="submit" name="save" value="Opslaan">
-        <input type="submit" name="cancel" value="Annuleren">
+<div id="inline-editor-editors" title="Bewerken">
+    <input type="text" value="" class="string editor">
+    <div id="htmlarea" class="text editor">
+        {$textarea}
     </div>
 </div>
 <div id="inline-editor-frame"><iframe id="inline-editor" src="{root_url}"></iframe></div>
