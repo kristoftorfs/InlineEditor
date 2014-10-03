@@ -105,6 +105,7 @@ $(document).ready(function() {
                                     text: 'Opslaan',
                                     icons: { primary: 'ui-icon-circle-check' },
                                     click: function() {
+                                        $('#inline-editor-editors').dialog('close');
                                     }
                                 },{
                                     text: 'Annuleren',
