@@ -34,9 +34,10 @@ class InlineEditor extends NetDesign {
         $query = "
         CREATE TABLE IF NOT EXISTS `$table` (
             `site_id` varchar(50) NOT NULL,
+            `page_alias` varchar(50) NOT NULL,
             `name` varchar(50) NOT NULL,
             `value` longblob,
-            PRIMARY KEY (`site_id`, `name`)
+            PRIMARY KEY (`site_id`, `page_alias`, `name`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
         ";
         $db->Execute($query);
