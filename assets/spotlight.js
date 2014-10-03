@@ -3,6 +3,7 @@ $(document).ready(function() {
     $('#inline-editor-editors').hide();
     $('#inline-editor-buttons').click(function(e) {
         var assetUrl = $('#inline-editor-helper').attr('data-assetUrl');
+        var writeUrl = $('#inline-editor-helper').attr('data-writeUrl');
         var siteId = $('#inline-editor-helper').attr('data-site');
         var context = $(iframe).contents();
         var el = $(e.target).parent('button');
@@ -48,6 +49,12 @@ $(document).ready(function() {
                     $('#inline-editor-editors').show();
                     $('#inline-editor-editors .editor').hide();
                     $('.inline-editor-spotlight a', context).hide();
+                    var data = {};
+                    $.each(el.get(0).attributes, function(i, attrib) {
+                        if (attrib.name.indexOf('data-inline-editor-') !== 0) return;
+                        var name = attrib.name.substr(19);
+                        data[name] = attrib.value;
+                    });
                     // Editing is starting
                     switch (el.attr('data-inline-editor-type')) {
                         case 'string':
@@ -68,6 +75,8 @@ $(document).ready(function() {
                                     text: 'Opslaan',
                                     icons: { primary: 'ui-icon-circle-check' },
                                     click: function() {
+                                        data.value = ed.val();
+                                        $.post(writeUrl, data, null, 'json');
                                         $('#inline-editor-editors').dialog('close');
                                     }
                                 },{
@@ -105,6 +114,8 @@ $(document).ready(function() {
                                     text: 'Opslaan',
                                     icons: { primary: 'ui-icon-circle-check' },
                                     click: function() {
+                                        data.value = ed.getContent();
+                                        $.post(writeUrl, data, null, 'json');
                                         $('#inline-editor-editors').dialog('close');
                                     }
                                 },{

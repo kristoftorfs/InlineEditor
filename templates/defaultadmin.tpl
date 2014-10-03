@@ -3,7 +3,7 @@
 <script type="text/javascript" src="{$assetUrl}/init.js"></script>
 <script type="text/javascript" src="{$assetUrl}/spotlight.js"></script>
 <!-- Configuration -->
-<div id="inline-editor-helper" data-site="{$site_id}" data-assetUrl="{$assetUrl}"></div>
+<div id="inline-editor-helper" data-site="{$site_id}" data-assetUrl="{$assetUrl}" data-writeUrl="{$writeUrl}"></div>
 <!-- Module contents -->
 <div id="inline-editor-buttons">
     <input disabled="disabled" type="submit" name="start" value="Bewerken starten">
