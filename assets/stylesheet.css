@@ -1,7 +1,9 @@
 .no-close .ui-dialog-titlebar-close {
     display: none;
 }
-
+#inline-editor-helper {
+    display: none;
+}
 #inline-editor-buttons {
     margin-bottom: 10px;
     /*text-align: center;*/
@@ -18,6 +20,9 @@ iframe#inline-editor {
 }
 #inline-editor-editors {
     display: none;
+}
+#inline-editor-editors input.editor.string {
+    width: 500px;
 }
 
 #inline-editor-spotlight-mask {
@@ -37,6 +42,17 @@ iframe#inline-editor {
 }
 .inline-editor-spotlight a {
     position: absolute;
-    right: 0px;
-    bottom: 0px;
+    right: 2px;
+    bottom: 2px;
+    color: #147fdb;
+    text-decoration: none;
+    font-family: sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+    font-style: normal;
+    text-transform: lowercase;
+}
+.inline-editor-spotlight a:hover {
+    color: #fa8004;
+    text-decoration: underline;
 }

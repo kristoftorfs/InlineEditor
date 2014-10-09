@@ -1,11 +1,29 @@
 $(document).ready(function() {
     var iframe = $('#inline-editor');
+    var assetUrl = $('#inline-editor-helper').attr('data-assetUrl');
+    var writeUrl = $('#inline-editor-helper').attr('data-writeUrl');
+    var siteId = $('#inline-editor-helper').attr('data-site');
+    var actionId = $('#inline-editor-helper').attr('data-actionId');
+    window.InlineEditor = {
+        // Iframe context
+        context: null,
+        // Calculate dimensions and position of our spotlights
+        spotlights: function() {
+            $('*[data-inline-editor-site="' + siteId + '"]', window.InlineEditor.context).each(function(index, el) {
+                el2 = $(el);
+                var sl = el2.data('spotlight');
+                sl.width(el2.width() - 2);
+                sl.height(el2.height() -2);
+                sl.css({
+                    'left': (el2.offset().left + parseInt(el2.css('padding-left') + parseInt(el2.css('margin-left')))) + 'px',
+                    'top': (el2.offset().top + parseInt(el2.css('padding-top') + parseInt(el2.css('margin-top')))) + 'px'
+                });
+            });
+        }
+    };
     $('#inline-editor-editors').hide();
     $('#inline-editor-buttons').click(function(e) {
-        var assetUrl = $('#inline-editor-helper').attr('data-assetUrl');
-        var writeUrl = $('#inline-editor-helper').attr('data-writeUrl');
-        var siteId = $('#inline-editor-helper').attr('data-site');
-        var context = $(iframe).contents();
+        var context = window.InlineEditor.context = iframe.contents();
         var el = $(e.target).parent('button');
         if (!el.attr('name')) return;
         var ready = $('body', context).hasClass('inline-editor-ready');
@@ -27,19 +45,12 @@ $(document).ready(function() {
                 // Create the spotlight for each item
                 $('*[data-inline-editor-site="' + siteId + '"]', context).each(function(index, el) {
                     el = $(el);
-                    var sl = $('<div class="inline-editor-spotlight"><a href=""></a></div>');
+                    var sl = $('<div class="inline-editor-spotlight">' + $('#inline-editor-helper a.spotlight-editor').outerHTML() + '</div>');
                     sl.data('element', el);
                     el.data('spotlight', sl);
-                    $('a', sl).text('Bewerken');
                     $('body', context).prepend(sl);
-                    // Calculate dimensions and position of our spotlight and show it
-                    sl.width(el.width() - 2);
-                    sl.height(el.height() -2);
-                    sl.css({
-                        'left': (el.offset().left + parseInt(el.css('padding-left') + parseInt(el.css('margin-left')))) + 'px',
-                        'top': (el.offset().top + parseInt(el.css('padding-top') + parseInt(el.css('margin-top')))) + 'px'
-                    });
                 });
+                window.InlineEditor.spotlights();
                 // Create our click event (editor) for every spotlight
                 $('.inline-editor-spotlight a', context).click(function(e) {
                     e.preventDefault();
@@ -56,6 +67,12 @@ $(document).ready(function() {
                         data[name] = attrib.value;
                     });
                     // Editing is starting
+                    var els = $(
+                        '*[data-inline-editor-name="' + el.attr('data-inline-editor-name') + '"]'
+                        + '[data-inline-editor-type="' + el.attr('data-inline-editor-type') + '"]'
+                        + '[data-inline-editor-page="' + el.attr('data-inline-editor-page') + '"]'
+                        + '[data-inline-editor-site="' + el.attr('data-inline-editor-site') + '"]'
+                        , context);
                     switch (el.attr('data-inline-editor-type')) {
                         case 'string':
                             var ed = $('#inline-editor-editors .string.editor');
@@ -64,27 +81,29 @@ $(document).ready(function() {
                             ed.show();
                             ed.val(el.text());
                             ed.on('input', function(e) {
-                                el.text($(this).val());
+                                els.text($(this).val());
+                                window.InlineEditor.spotlights();
                             });
                             $('#inline-editor-editors').dialog({
                                 dialogClass: 'no-close',
                                 hide: true,
                                 show: true,
                                 resizable: false,
+                                width: 'auto',
                                 buttons: [{
                                     text: 'Opslaan',
                                     icons: { primary: 'ui-icon-circle-check' },
                                     click: function() {
                                         data.value = ed.val();
                                         $.post(writeUrl, data, null, 'json');
-                                        el.data('InlineEditorOriginalData', data.value);
+                                        els.data('InlineEditorOriginalData', data.value);
                                         $('#inline-editor-editors').dialog('close');
                                     }
                                 },{
                                     text: 'Annuleren',
                                     icons: { secondary: 'ui-icon-circle-close' },
                                     click: function() {
-                                        el.text(el.data('InlineEditorOriginalData'));
+                                        els.text(el.data('InlineEditorOriginalData'));
                                         $('#inline-editor-editors').dialog('close');
                                     }
                                 }],
@@ -110,23 +129,26 @@ $(document).ready(function() {
                                 hide: true,
                                 show: true,
                                 resizable: false,
-                                width: $('#textarea_tbl').width() + 25,
+                                width: 'auto',
                                 buttons: [{
                                     text: 'Opslaan',
                                     icons: { primary: 'ui-icon-circle-check' },
                                     click: function() {
                                         data.value = ed.getContent();
                                         $.post(writeUrl, data, null, 'json');
-                                        el.data('InlineEditorOriginalData', data.value);
+                                        els.data('InlineEditorOriginalData', data.value);
                                         $('#inline-editor-editors').dialog('close');
                                     }
                                 },{
                                     text: 'Annuleren',
                                     icons: { secondary: 'ui-icon-circle-close' },
                                     click: function() {
-                                        var ed = tinymce.EditorManager.get('textarea');
-                                        ed.onChange.dispatch(ed, {content: el.data('InlineEditorOriginalData')});
+                                        //var ed = tinymce.EditorManager.get('textarea');
+                                        //ed.onChange.dispatch(ed, {content: el.data('InlineEditorOriginalData')});
+                                        els.html(el.data('InlineEditorOriginalData'));
                                         $('#inline-editor-editors').dialog('close');
+                                        // Resize our spotlight(s)
+                                        window.InlineEditor.spotlights();
                                     }
                                 }],
                                 close: function() {
@@ -138,23 +160,30 @@ $(document).ready(function() {
                                 open: function() {
                                     toggleEditor('textarea');
                                     $('textarea').val(el.data('InlineEditorOriginalData'));
-                                    el.html(el.data('InlineEditorOriginalData'));
+                                    els.html(el.data('InlineEditorOriginalData'));
                                     toggleEditor('textarea');
                                     var ed = tinymce.EditorManager.get('textarea');
                                     ed.onChange.listeners = [];
                                     ed.onChange.add(function(ed, l) {
-                                        el.html(ed.getContent());
-                                        // Resize our spotlight
-                                        var sl = el.data('spotlight');
-                                        sl.width(el.width() - 2);
-                                        sl.height(el.height() -2);
-                                        sl.css({
-                                            'left': (el.offset().left + parseInt(el.css('padding-left') + parseInt(el.css('margin-left')))) + 'px',
-                                            'top': (el.offset().top + parseInt(el.css('padding-top') + parseInt(el.css('margin-top')))) + 'px'
-                                        });
+                                        els.html(ed.getContent());
+                                        // Resize our spotlight(s)
+                                        window.InlineEditor.spotlights();
                                     });
                                 }
                             });
+                            break;
+                        case 'thumbnail':
+                            var form = $('form[data-form="editthumbnail"]');
+                            el.get(0).setAttribute('data-inline-editor-iframeUrl', context.get(0).location.toString());
+                            $.each(el.get(0).attributes, function(i, attrib) {
+                                if (attrib.name.indexOf('data-inline-editor-') !== 0) return;
+                                var name = attrib.name.substr(19);
+                                var el = $('<input type="hidden">');
+                                el.attr('name', actionId + name);
+                                el.val(attrib.value);
+                                form.append(el);
+                            });
+                            form.submit();
                             break;
                     }
                 });
