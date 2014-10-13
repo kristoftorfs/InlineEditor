@@ -16,6 +16,11 @@ class InlineEditor extends NetDesign {
         return 'content';
     }
 
+
+    function GetDependencies() {
+        return array('NetDesign' => '1.0.0', 'ThumbnailEditor' => '1.0.0');
+    }
+
     function GetAdminMenuItems() {
         if (!$this->CheckPermission('InlineEditor')) return array();
         $ret = CmsAdminMenuItem::from_module($this);
