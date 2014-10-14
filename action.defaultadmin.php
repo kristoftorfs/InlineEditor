@@ -5,6 +5,7 @@ if (!isset($gCms)) exit;
 if (!$this->CheckPermission('InlineEditor')) exit;
 /** @var CmsAdminThemeBase $theme */
 $theme = CmsAdminThemeBase::GetThemeObject();
+$this->AssignLang();
 
 if (array_key_exists('InlineEditor', $_SESSION)) {
     $this->smarty->assign('gotoSrc', $_SESSION['InlineEditor']['url']);

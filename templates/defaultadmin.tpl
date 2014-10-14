@@ -9,17 +9,20 @@
     data-assetUrl="{$assetUrl}"
     data-writeUrl="{$writeUrl}"
     data-actionId="{$actionid}"
+{foreach $lang as $key => $value}
+    data-lang-{$key}="{$value|htmlentities}"
+{/foreach}
     {if isset($gotoName)}data-autoEdit="{$gotoName}"{/if}
     >
-    <a class="spotlight-editor" href=""><img src="{$editIcon}" alt="Bewerken" title="Bewerken"></a>
+    <a class="spotlight-editor" href=""><img src="{$editIcon}" alt="{$lang.edit|htmlentities}" title="{$lang.edit|htmlentities}"></a>
     {$thumbForm}
 </div>
 <!-- Module contents -->
 <div id="inline-editor-buttons">
-    <input disabled="disabled" type="submit" name="start" value="Bewerken starten">
-    <input disabled="disabled" type="submit" name="cancel" value="Bewerken stoppen">
+    <input disabled="disabled" type="submit" name="start" value="{$lang.startedit|htmlentities}">
+    <input disabled="disabled" type="submit" name="cancel" value="{$lang.stopedit|htmlentities}">
 </div>
-<div id="inline-editor-editors" title="Bewerken">
+<div id="inline-editor-editors" title="{$lang.edit|htmlentities}">
     <input type="text" value="" class="string editor">
     <div id="htmlarea" class="text editor">
         {$textarea}

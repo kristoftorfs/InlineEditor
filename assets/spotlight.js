@@ -32,7 +32,7 @@ $(document).ready(function() {
         if (el.attr('name') == 'start') {
             // Check if we are on an active page for this site
             if ($('*[data-inline-editor-site="' + siteId + '"]', context).length == 0) {
-                // TODO: error message
+                alert($('#inline-editor-helper').attr('data-lang-error'));
                 return;
             }
             $('#inline-editor-buttons button[name="start"]').button('disable');
@@ -92,7 +92,7 @@ $(document).ready(function() {
                                 resizable: false,
                                 width: 'auto',
                                 buttons: [{
-                                    text: 'Opslaan',
+                                    text: $('#inline-editor-helper').attr('data-lang-save'),
                                     icons: { primary: 'ui-icon-circle-check' },
                                     click: function() {
                                         data.value = ed.val();
@@ -101,7 +101,7 @@ $(document).ready(function() {
                                         $('#inline-editor-editors').dialog('close');
                                     }
                                 },{
-                                    text: 'Annuleren',
+                                    text: $('#inline-editor-helper').attr('data-lang-cancel'),
                                     icons: { secondary: 'ui-icon-circle-close' },
                                     click: function() {
                                         els.text(el.data('InlineEditorOriginalData'));
@@ -132,7 +132,7 @@ $(document).ready(function() {
                                 resizable: false,
                                 width: 'auto',
                                 buttons: [{
-                                    text: 'Opslaan',
+                                    text: $('#inline-editor-helper').attr('data-lang-save'),
                                     icons: { primary: 'ui-icon-circle-check' },
                                     click: function() {
                                         data.value = ed.getContent();
@@ -141,7 +141,7 @@ $(document).ready(function() {
                                         $('#inline-editor-editors').dialog('close');
                                     }
                                 },{
-                                    text: 'Annuleren',
+                                    text: $('#inline-editor-helper').attr('data-lang-cancel'),
                                     icons: { secondary: 'ui-icon-circle-close' },
                                     click: function() {
                                         //var ed = tinymce.EditorManager.get('textarea');
