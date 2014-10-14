@@ -3,7 +3,7 @@
 /** @var InlineEditor $this */
 if (!isset($gCms)) exit;
 $page = ContentOperations::get_instance()->getContentObject()->Alias();
-$uid = sprintf('%s/%s', $page, $params['name']);
+$uid = sprintf('%s/%s/%s', $this->GetSiteId(), $page, $params['name']);
 $thumb = ThumbnailEditor::GetInstance()->Load($this, $uid);
 $default = array_key_exists('default', $params) ? $params['default'] : '';
 if (array_key_exists('original', $params)) $params['original'] = (bool)$params['original'];
