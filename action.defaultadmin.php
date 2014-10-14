@@ -6,6 +6,12 @@ if (!$this->CheckPermission('InlineEditor')) exit;
 /** @var CmsAdminThemeBase $theme */
 $theme = CmsAdminThemeBase::GetThemeObject();
 
+if (array_key_exists('InlineEditor', $_SESSION)) {
+    $this->smarty->assign('gotoSrc', $_SESSION['InlineEditor']['url']);
+    $this->smarty->assign('gotoName', $_SESSION['InlineEditor']['name']);
+    unset($_SESSION['InlineEditor']);
+}
+
 // Configuration
 $this->smarty->assign('editIcon', cms_join_path($this->GetModuleURLPath(), 'assets', 'edit.png'));
 $this->smarty->assign('site_id', NetDesign::GetInstance()->GetSiteId());

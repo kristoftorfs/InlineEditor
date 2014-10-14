@@ -9,8 +9,8 @@ $editor = ThumbnailEditor::GetInstance();
 $editor->EditorInit($this, 'editthumbnail', $id, $uid, $params['width'], $params['height'], $params);
 $ret = $editor->EditorProcess();
 if (in_array($ret, array(ThumbnailEditor::OPERATION_CANCELLED, ThumbnailEditor::OPERATION_SUBMITTED))) {
-    $p = base64_encode(serialize(array('url' => $params['iframeurl'], 'name' => $params['name'])));
-    $this->Redirect($id, 'defaultadmin', '', array('goto' => $p));
+    $_SESSION['InlineEditor'] = array('url' => $params['iframeurl'], 'name' => $params['name']);
+    $this->Redirect($id, 'defaultadmin', '');
 } else {
     $editor->EditorDisplay();
 }

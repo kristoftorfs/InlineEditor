@@ -24,7 +24,8 @@ $(document).ready(function() {
     $('#inline-editor-editors').hide();
     $('#inline-editor-buttons').click(function(e) {
         var context = window.InlineEditor.context = iframe.contents();
-        var el = $(e.target).parent('button');
+        if (e.target.tagName == 'BUTTON') var el = $(e.target);
+        else var el = $(e.target).parent('button');
         if (!el.attr('name')) return;
         var ready = $('body', context).hasClass('inline-editor-ready');
         el.blur();
@@ -206,6 +207,17 @@ $(document).ready(function() {
     });
     iframe.load(function() {
         $('#inline-editor-buttons button[name="start"]').button('enable');
+        var autoEdit = $('#inline-editor-helper').attr('data-autoEdit');
+        if (!autoEdit) return;
+        setTimeout(function() {
+            var context = iframe.contents();
+            $('#inline-editor-buttons button[name="start"]').click();
+            var el = context.find('*[data-inline-editor-name="' + autoEdit + '"]').first();
+            context.find('html, body').animate({
+                scrollTop: el.offset().top,
+                scrollLeft: el.offset().left
+            })
+        }, 100);
     });
     /*
     iframe.contents().on('unload', function() {
@@ -213,34 +225,4 @@ $(document).ready(function() {
     });
     console.log(document.getElementById('inline-editor').onunload);
      */
-    return;
-    $(iframe).load(function() {
-        var mask = $('#inline-editor-spotlight-mask', context);
-        $('*[data-inline-editor-name]', context).mouseenter(function(e) {
-            var el = $(e.delegateTarget);
-            var ed = el.data('spotlight');
-            // Calculate dimensions of our mask and show it
-            mask.width(context.width());
-            mask.height(context.height());
-            //mask.css('display', 'block');
-            mask.fadeIn();
-            // Calculate dimensions and position of our spotlight and show it
-            ed.width(el.width());
-            ed.height(el.height());
-            ed.css({
-                'display': 'block',
-                'left': (el.offset().left + parseInt(el.css('padding-left') + parseInt(el.css('margin-left')))) + 'px',
-                'top': (el.offset().top + parseInt(el.css('padding-top') + parseInt(el.css('margin-top')))) + 'px'
-            });
-        });
-        var leave = function(e) {
-            var el = $(e.delegateTarget);
-            if (!el.hasClass('inline-editor-spotlight')) el = el.next('.inline-editor-spotlight');
-            el.css('display', 'none');
-            //mask.css('display', 'none');
-            mask.hide();
-        };
-        $('.inline-editor-spotlight', context).mouseout(leave);
-        //$('*[data-inline-editor-name]', context).mouseleave(leave);
-    });
 });

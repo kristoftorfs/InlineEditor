@@ -3,7 +3,14 @@
 <script type="text/javascript" src="{$assetUrl}/init.js"></script>
 <script type="text/javascript" src="{$assetUrl}/spotlight.js"></script>
 <!-- Configuration -->
-<div id="inline-editor-helper" data-site="{$site_id}" data-assetUrl="{$assetUrl}" data-writeUrl="{$writeUrl}" data-actionId="{$actionid}">
+<div
+    id="inline-editor-helper"
+    data-site="{$site_id}"
+    data-assetUrl="{$assetUrl}"
+    data-writeUrl="{$writeUrl}"
+    data-actionId="{$actionid}"
+    {if isset($gotoName)}data-autoEdit="{$gotoName}"{/if}
+    >
     <a class="spotlight-editor" href=""><img src="{$editIcon}" alt="Bewerken" title="Bewerken"></a>
     {$thumbForm}
 </div>
@@ -18,4 +25,4 @@
         {$textarea}
     </div>
 </div>
-<div id="inline-editor-frame"><iframe id="inline-editor" src="{root_url}"></iframe></div>
+<div id="inline-editor-frame"><iframe id="inline-editor" src="{if !isset($gotoSrc)}{root_url}{else}{$gotoSrc}{/if}"></iframe></div>
