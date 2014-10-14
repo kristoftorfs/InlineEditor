@@ -5,9 +5,12 @@ if (!isset($gCms)) exit;
 $page = ContentOperations::get_instance()->getContentObject()->Alias();
 $uid = sprintf('%s/%s', $page, $params['name']);
 $thumb = ThumbnailEditor::GetInstance()->Load($this, $uid);
+$default = array_key_exists('default', $params) ? $params['default'] : '';
 if (array_key_exists('original', $params)) $params['original'] = (bool)$params['original'];
 if ($params['original']) {
-    echo $thumb->GetOriginalUrl();
+    $ret = $thumb->GetOriginalUrl();
 } else {
-    echo $thumb->GetThumbnailUrl();
+    $ret = $thumb->GetThumbnailUrl();
 }
+if (empty($ret)) echo $default;
+else echo $ret;
