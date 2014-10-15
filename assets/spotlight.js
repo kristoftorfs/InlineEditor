@@ -80,7 +80,7 @@ $(document).ready(function() {
                             el.data('InlineEditorOriginalData', el.text());
                             ed.off();
                             ed.show();
-                            ed.val(el.text());
+                            ed.val($.trim(el.text()));
                             ed.on('input', function(e) {
                                 els.text($(this).val());
                                 window.InlineEditor.spotlights();
@@ -123,7 +123,7 @@ $(document).ready(function() {
                             $('#check_textarea').remove();
                             ed.show();
                             ed.theme.resizeTo('100%', 400);
-                            el.data('InlineEditorOriginalData', el.html());
+                            el.data('InlineEditorOriginalData', $.trim(el.html()));
                             $('#inline-editor-editors .text.editor').show();
                             $('#inline-editor-editors').dialog({
                                 dialogClass: 'no-close',
