@@ -34,7 +34,11 @@ if (array_key_exists('map', $params) && array_key_exists('property', $params) &&
             $attrs['type'] = 'text';
             break;
         case 'thumbnail':
-            return;
+            /** @var Thumbnail $thumb */
+            $thumb = $object->$prp;
+            $attrs['type'] = 'thumbnail';
+            $attrs['width'] = $thumb->GetConfigWidth();
+            $attrs['height'] = $thumb->GetConfigHeight();
             break;
     }
     // Output the attributes
