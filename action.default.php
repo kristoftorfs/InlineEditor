@@ -45,6 +45,27 @@ if (array_key_exists('map', $params) && array_key_exists('property', $params) &&
     foreach($attrs as $key => $value) {
         printf(' data-inline-editor-%s="%s"', $key, htmlentities($value));
     }
+} elseif (array_key_exists('redirect', $params)) {
+    // Check for proper module and parse module action
+    $redirect = explode('.', $params['redirect'], 2);
+    if (count($redirect) < 2) $redirect[1] = 'defaultadmin';    // Default action is defaultadmin
+    if (!is_subclass_of($redirect[0], 'NetDesign')) return;
+    // Clone $params
+    $p = array();
+    $del = array('module', 'action', 'redirect');
+    foreach($params as $key => $value) {
+        $skip = array('module', 'action', 'redirect');
+        if (in_array($key, $skip)) continue;
+        $p[$key] = $value;
+    }
+    // Output site
+    printf(' data-inline-editor-%s="%s"', 'site', htmlentities($this->GetSiteId()));
+    // Output type
+    printf(' data-inline-editor-%s="%s"', 'type', 'redirect');
+    // Output URL
+    /** @var NetDesign $module */
+    $module = $redirect[0]::getInstance();
+    printf(' data-inline-editor-%s="%s"', 'redirect', $module->create_url('__actionId__', $redirect[1], '', $p));
 } else {
     // Simple editing
     $params['page'] = $page;

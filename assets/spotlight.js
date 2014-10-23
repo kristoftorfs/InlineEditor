@@ -75,6 +75,16 @@ $(document).ready(function() {
                         + '[data-inline-editor-site="' + el.attr('data-inline-editor-site') + '"]'
                         , context);
                     switch (el.attr('data-inline-editor-type')) {
+                        case 'redirect':
+                            var url = el.attr('data-inline-editor-redirect').replace(/__actionId__/g, actionId);
+                            var cnf = confirm($('#inline-editor-helper').attr('data-lang-redirect'));
+                            if (cnf) {
+                                window.location.href = url;
+                            } else {
+                                $('#inline-editor-editors').hide();
+                                $('.inline-editor-spotlight a', context).show();
+                            }
+                            break;
                         case 'string':
                             var ed = $('#inline-editor-editors .string.editor');
                             el.data('InlineEditorOriginalData', el.text());

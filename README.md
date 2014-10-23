@@ -91,3 +91,26 @@ It is possible to edit properties of a Map object, but only if they are one of t
 ```
 <div{InlineEditor map="MapProduct" property="text" id=$product->getId()}>{$product->text}</div>
 ```
+
+## Redirect to another module for editing
+
+It is possible to highlight certain elements for editing, but have the user redirected to another module to actually do it.
+
+Just use the default action but specify the redirect parameter as "<module>.<module action>". If you simply specify a module the action will be set to defaultadmin.
+All other parameters given at this point will be passed through to the other module.
+
+### Example code
+
+```
+<ul class="list-1 openinghours"{InlineEditor redirect="OpeningHours"}>{OpeningHours location=1}
+    {foreach $openinghours.hours as $record}
+        <li>
+            <span>{$record.from|ucfirst|escape}{if !empty($record.until)} {if $record.diff > 1}tot{else}en{/if} {$record.until|escape}{/if}:</span>
+            {if empty($record.times)} gesloten.{else}
+                {foreach $record.times as $time}{if $time@first} {/if}{if $time@last && $time@total > 1} en {/if}{$time.from} tot {$time.until}{if $time@iteration < $time@total -1}, {/if}{/foreach}
+            {/if}
+        </li>
+    {/foreach}
+</ul>
+{if $openinghours.exception}<p class="closed"{InlineEditor redirect="OpeningHours" tab="exceptions"}><strong>Wij zijn gesloten van {$openinghours.exception.from|cms_date_format:'%e %B'|strtolower} tot en met {$openinghours.exception.until|cms_date_format:'%e %B'|strtolower}{if !empty($openinghours.exception.reason)} wegens {$openinghours.exception.reason|strtolower|escape}{/if}.</strong></p>{/if}
+```
