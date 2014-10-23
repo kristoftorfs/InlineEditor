@@ -81,3 +81,13 @@ in your code. The parameters for this action are the following:
 ```
 <p class="subtitle">{InlineEditor action="value" name="subtitle" default="My default subtitle"}</p>
 ```
+
+## Editing Map properties
+
+It is possible to edit properties of a Map object, but only if they are one of the three supported types (string, text and thumbnail).
+
+### Example code
+
+```
+<div{InlineEditor map="MapProduct" property="text" id=$product->getId()}>{$product->text}</div>
+```
