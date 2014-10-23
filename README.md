@@ -15,6 +15,7 @@ parameters:
 - _type_: 'string', 'text' or 'thumbnail'
 - _width_: the width a thumbnail should have
 - _height_: the height a thumbnail should have
+- _sitewide_: boolean, if true the element can be used on more than one pages
 
 The default action will complete your HTML tag, but also assign the currently set value to the variable $value. You can work with default values by either using an
 if operator or by using the smarty 'default' modifier. Examples of both are given below, however for HTML text it is probably easier and clearer coding by using the

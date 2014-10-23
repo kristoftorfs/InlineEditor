@@ -48,6 +48,10 @@ if (array_key_exists('map', $params) && array_key_exists('property', $params) &&
 } else {
     // Simple editing
     $params['page'] = $page;
+    if (array_key_exists('sitewide', $params) && (bool)$params['sitewide'] === true) {
+        unset($params['sitewide']);
+        $params['page'] = '*';
+    }
     $params['site'] = $site;
     foreach($params as $key => $value) {
         $skip = array('module', 'action');
