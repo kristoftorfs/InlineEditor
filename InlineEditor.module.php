@@ -18,7 +18,7 @@ class InlineEditor extends NetDesign {
 
 
     function GetDependencies() {
-        return array('NetDesign' => '1.0.0', 'ThumbnailEditor' => '1.0.0');
+        return array('NetDesign' => '1.0.0', 'ThumbnailEditor' => '1.0.0', 'TinyMCE' => '2.9.12');
     }
 
     function GetAdminMenuItems() {
