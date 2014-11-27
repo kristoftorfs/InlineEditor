@@ -27,5 +27,11 @@
     <div id="htmlarea" class="text editor">
         {$textarea}
     </div>
+    <div class="link editor">
+        <label for="linktext">Tekst:</label>
+        <input type="text" id="linktext" name="linktext" value="">
+        <label for="linkhref">Pagina:</label>
+        {$linkhref}
+    </div>
 </div>
 <div id="inline-editor-frame"><iframe id="inline-editor" src="{if !isset($gotoSrc)}{root_url}{else}{$gotoSrc}{/if}"></iframe></div>

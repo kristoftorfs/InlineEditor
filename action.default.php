@@ -74,11 +74,6 @@ if (array_key_exists('map', $params) && array_key_exists('property', $params) &&
         $params['page'] = '*';
     }
     $params['site'] = $site;
-    foreach($params as $key => $value) {
-        $skip = array('module', 'action');
-        if (in_array($key, $skip)) continue;
-        printf(' data-inline-editor-%s="%s"', $key, htmlentities($value));
-    }
     // Set the value
     $table = $this->GetTable();
     $ret = $this->db->GetArray("SELECT * FROM `$table` WHERE `site_id` = ? AND `page_alias` = ? AND `name` = ?", array($params['site'], $params['page'], $params['name']));
@@ -91,5 +86,31 @@ if (array_key_exists('map', $params) && array_key_exists('property', $params) &&
         if ($config['type'] == 'string') $value = htmlentities($value);
         if (empty($value)) $value = null;
     }
+    // Special code for a link
+    if ($params['type'] == 'link') {
+        if (!empty($value)) {
+            $value = unserialize($value);
+            $value['text'] = htmlentities($value['text']);
+        } else {
+            $href = null;
+            if (array_key_exists('default', $params)) {
+                if (!is_numeric($params['default'])) {
+                    // An alias is given, get the id
+                    /** @var ContentOperations $cops */
+                    $cops = cmsms()->GetContentOperations();
+                    $params['default'] = $cops->GetPageIDFromAlias($params['default']);
+                }
+                $href = $params['default'];
+            }
+            $value = array('href' => $href, 'text' => '');
+        }
+    }
+    $params['link-value'] = $value['href'];
     $this->smarty->assign('value', $value);
+    // Output HTML element attributes
+    foreach($params as $key => $value) {
+        $skip = array('module', 'action');
+        if (in_array($key, $skip)) continue;
+        printf(' data-inline-editor-%s="%s"', $key, htmlentities($value));
+    }
 }

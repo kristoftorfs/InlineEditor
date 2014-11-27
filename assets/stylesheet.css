@@ -24,6 +24,20 @@ iframe#inline-editor {
 #inline-editor-editors input.editor.string {
     width: 500px;
 }
+#inline-editor-editors .editor.link label {
+    display: block;
+    margin: 10px 0 5px 0;
+}
+#inline-editor-editors .editor.link label:first-child {
+    margin-top: 5px;
+}
+#inline-editor-editors .editor.link input,
+#inline-editor-editors .editor.link select {
+    width: 350px;
+}
+#inline-editor-editors .editor.link select {
+    margin-bottom: 5px;
+}
 
 #inline-editor-spotlight-mask {
     display: none;

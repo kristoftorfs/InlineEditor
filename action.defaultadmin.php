@@ -36,4 +36,7 @@ if (class_exists('CmsFormUtils')) {
     // CMSMS 1.x
     $this->smarty->assign('textarea', $this->CreateTextArea(true, null, '', 'textarea'));
 }
+/** @var ContentOperations $cops */
+$cops = cmsms()->GetContentOperations();
+$this->smarty->assign('linkhref', $cops->CreateHierarchyDropdown('', '', 'linkhref'));
 echo $this->smarty->fetch($this->GetFileResource('defaultadmin.tpl'));

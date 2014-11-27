@@ -126,6 +126,52 @@ $(document).ready(function() {
                                 }
                             });
                             break;
+                        case 'link':
+                            var ed = $('#inline-editor-editors .link.editor');
+                            el.data('InlineEditorOriginalData', { href: el.attr('data-inline-editor-link-value'), text: el.text() });
+                            ed.show();
+                            ed.find('input[name="linktext"]').val($.trim(el.text()));
+                            ed.find('input[name="linktext"]').off().on('input', function(e) {
+                                els.text($(this).val());
+                                window.InlineEditor.spotlights();
+                            });
+                            ed.find('select[name="linkhref"]').val(el.attr('data-inline-editor-link-value'));
+                            $('#inline-editor-editors').dialog({
+                                dialogClass: 'no-close',
+                                hide: true,
+                                show: true,
+                                resizable: false,
+                                width: 'auto',
+                                buttons: [{
+                                    text: $('#inline-editor-helper').attr('data-lang-save'),
+                                    icons: { primary: 'ui-icon-circle-check' },
+                                    click: function() {
+                                        data.value = {
+                                            href: ed.find('select[name="linkhref"]').val(),
+                                            text: ed.find('input[name="linktext"]').val()
+                                        };
+                                        data.reload = context.get(0).location.toString();
+                                        $.post(writeUrl, data, null, 'json');
+                                        els.data('InlineEditorOriginalData', data.value);
+                                        $('#inline-editor-editors').dialog('close');
+                                        document.location.reload();
+                                    }
+                                },{
+                                    text: $('#inline-editor-helper').attr('data-lang-cancel'),
+                                    icons: { secondary: 'ui-icon-circle-close' },
+                                    click: function() {
+                                        els.text(el.data('InlineEditorOriginalData').text);
+                                        $('#inline-editor-editors').dialog('close');
+                                    }
+                                }],
+                                close: function() {
+                                    $('#inline-editor-buttons button[name="cancel"]').button('enable');
+                                    $('#inline-editor-editors').dialog('destroy');
+                                    $('#inline-editor-editors').hide();
+                                    $('.inline-editor-spotlight a', context).show();
+                                }
+                            });
+                            break;
                         case 'text':
                             var ed = tinymce.EditorManager.get('textarea');
                             $('#check_textarea').prev('br').remove();
