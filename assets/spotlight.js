@@ -4,6 +4,7 @@ $(document).ready(function() {
     var writeUrl = $('#inline-editor-helper').attr('data-writeUrl');
     var siteId = $('#inline-editor-helper').attr('data-site');
     var actionId = $('#inline-editor-helper').attr('data-actionId');
+    var cmsVersion = parseInt($('#inline-editor-helper').attr('data-cms-version'));
     window.InlineEditor = {
         // Iframe context
         context: null,
@@ -173,12 +174,14 @@ $(document).ready(function() {
                             });
                             break;
                         case 'text':
-                            var ed = tinymce.EditorManager.get('textarea');
-                            $('#check_textarea').prev('br').remove();
-                            $('#check_textarea').next('label').remove();
-                            $('#check_textarea').remove();
-                            ed.show();
-                            ed.theme.resizeTo('100%', 400);
+                            if (cmsVersion == 1) {
+                                var ed = tinymce.EditorManager.get('textarea');
+                                $('#check_textarea').prev('br').remove();
+                                $('#check_textarea').next('label').remove();
+                                $('#check_textarea').remove();
+                                ed.show();
+                                ed.theme.resizeTo('100%', 400);
+                            }
                             el.data('InlineEditorOriginalData', $.trim(el.html()));
                             $('#inline-editor-editors .text.editor').show();
                             $('#inline-editor-editors').dialog({
@@ -191,6 +194,9 @@ $(document).ready(function() {
                                     text: $('#inline-editor-helper').attr('data-lang-save'),
                                     icons: { primary: 'ui-icon-circle-check' },
                                     click: function() {
+                                        if (cmsVersion == 2) {
+                                            var ed = tinymce.EditorManager.get('textarea');
+                                        }
                                         data.value = ed.getContent();
                                         $.post(writeUrl, data, null, 'json');
                                         els.data('InlineEditorOriginalData', data.value);
@@ -200,8 +206,6 @@ $(document).ready(function() {
                                     text: $('#inline-editor-helper').attr('data-lang-cancel'),
                                     icons: { secondary: 'ui-icon-circle-close' },
                                     click: function() {
-                                        //var ed = tinymce.EditorManager.get('textarea');
-                                        //ed.onChange.dispatch(ed, {content: el.data('InlineEditorOriginalData')});
                                         els.html(el.data('InlineEditorOriginalData'));
                                         $('#inline-editor-editors').dialog('close');
                                         // Resize our spotlight(s)
@@ -209,23 +213,45 @@ $(document).ready(function() {
                                     }
                                 }],
                                 close: function() {
+                                    if (cmsVersion == 2) {
+                                        var ed = tinymce.EditorManager.get('textarea');
+                                        ed.remove();
+                                    }
                                     $('#inline-editor-buttons button[name="cancel"]').button('enable');
                                     $('#inline-editor-editors').dialog('destroy');
                                     $('#inline-editor-editors').hide();
                                     $('.inline-editor-spotlight a', context).show();
                                 },
                                 open: function() {
-                                    toggleEditor('textarea');
-                                    $('textarea').val(el.data('InlineEditorOriginalData'));
-                                    els.html(el.data('InlineEditorOriginalData'));
-                                    toggleEditor('textarea');
-                                    var ed = tinymce.EditorManager.get('textarea');
-                                    ed.onChange.listeners = [];
-                                    ed.onChange.add(function(ed, l) {
-                                        els.html(ed.getContent());
-                                        // Resize our spotlight(s)
-                                        window.InlineEditor.spotlights();
-                                    });
+                                    if (cmsVersion == 1) {
+                                        toggleEditor('textarea');
+                                        $('textarea').val(el.data('InlineEditorOriginalData'));
+                                        els.html(el.data('InlineEditorOriginalData'));
+                                        toggleEditor('textarea');
+                                        var ed = tinymce.EditorManager.get('textarea');
+                                        ed.onChange.listeners = [];
+                                        ed.onChange.add(function(ed, l) {
+                                            els.html(ed.getContent());
+                                            // Resize our spotlight(s)
+                                            window.InlineEditor.spotlights();
+                                        });
+                                    } else {
+                                        $('#textarea').val(el.data('InlineEditorOriginalData'));
+                                        tinymce.EditorManager.on('AddEditor', function(e) {
+                                            els.html(el.data('InlineEditorOriginalData'));
+                                            var ed = e.editor;
+                                            //ed.theme.resizeTo('100%', 400);
+                                            ed.on('change', function(e) {
+                                                els.html(e.level.content);
+                                                // Resize our spotlight(s)
+                                                window.InlineEditor.spotlights();
+                                            });
+                                            ed.on('init', function(e) {
+                                                e.target.theme.resizeTo('100%');
+                                            });
+                                        });
+                                        InlineEditorMicroTiny();
+                                    }
                                 }
                             });
                             break;

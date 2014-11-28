@@ -1,3 +1,4 @@
+{if $cmsversion eq 2}<script type="text/javascript" src="{cms_action_url action="microtiny" suppress="1"}"></script>{/if}
 <!-- Inline Editor -->
 <link rel="stylesheet" href="{$assetUrl}/stylesheet.css" type="text/css" />
 <script type="text/javascript" src="{$assetUrl}/init.js"></script>
@@ -9,6 +10,7 @@
     data-assetUrl="{$assetUrl}"
     data-writeUrl="{$writeUrl}"
     data-actionId="{$actionid}"
+    data-cms-version="{$cmsversion}"
 {foreach $lang as $key => $value}
     data-lang-{$key}="{$value|htmlentities}"
 {/foreach}
@@ -25,7 +27,7 @@
 <div id="inline-editor-editors" title="{$lang.edit|htmlentities}">
     <input type="text" value="" class="string editor">
     <div id="htmlarea" class="text editor">
-        {$textarea}
+        {if isset($textarea)}{$textarea}{else}<textarea id="textarea" cols="80" rows="10"></textarea>{/if}
     </div>
     <div class="link editor">
         <label for="linktext">Tekst:</label>
