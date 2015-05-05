@@ -1,4 +1,3 @@
-{if $cmsversion eq 2}<script type="text/javascript" src="{cms_action_url action="microtiny" suppress="1"}"></script>{/if}
 <!-- Inline Editor -->
 <link rel="stylesheet" href="{$assetUrl}/stylesheet.css" type="text/css" />
 <script type="text/javascript" src="{$assetUrl}/init.js"></script>
